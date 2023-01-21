@@ -81,15 +81,21 @@ export default function Home() {
               }`}
             >
               {showNumberPool &&
-                numberPool?.map((number) => (
-                  <div className="bg-red-600 w-16  h-16 flex items-center justify-center leading-tight rounded-full shadow-lg shadow-white">
+                numberPool?.map((number, index) => (
+                  <div
+                    key={index}
+                    className="bg-red-600 w-16  h-16 flex items-center justify-center leading-tight rounded-full shadow-lg shadow-white"
+                  >
                     <h2 className="text-lg font-bold text-center">{number}</h2>
                   </div>
                 ))}
 
               {showLuckyNumber &&
-                luckyNumber.map((number) => (
-                  <div className="bg-red-600 w-16  h-16 flex items-center justify-center leading-tight rounded-full shadow-lg shadow-white">
+                luckyNumber.map((number, index) => (
+                  <div
+                    key={index}
+                    className="bg-red-600 w-16  h-16 flex items-center justify-center leading-tight rounded-full shadow-lg shadow-white"
+                  >
                     <h2 className="text-lg font-bold text-center">{number}</h2>
                   </div>
                 ))}
