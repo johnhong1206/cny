@@ -3,6 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import Fade from "react-reveal/Fade";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -24,6 +25,8 @@ export default function Home() {
   const [luckyNumber, setLuckyNumber] = useState([]);
   const [showNumberPool, setShowNumberPool] = useState(true);
   const [showLuckyNumber, setShowLuckyNumber] = useState(false);
+  const [regen, setRegen] = useState(false);
+  const [allLuckyNumber, setAllLuckyNumber] = useState([]);
 
   const addNumber = (e) => {
     e.preventDefault();
@@ -45,12 +48,13 @@ export default function Home() {
   };
 
   const regenerate = (e) => {
-    setLuckyNumber([]);
-    var random = numberPool.sort(() => Math.random() - 0.5);
-    setLuckyNumber(random);
+    // setLuckyNumber([]);
+    // var random = numberPool.sort(() => Math.random() - 0.5);
+    // setLuckyNumber(random);
 
-    setShowNumberPool(true);
-    setShowLuckyNumber(false);
+    // setShowNumberPool(true);
+    // setShowLuckyNumber(false);
+    setRegen(true);
   };
 
   const reset = (e) => {
@@ -60,7 +64,31 @@ export default function Home() {
     setShowLuckyNumber(false);
   };
 
-  console.log("pool", numberPool, showNumberPool);
+  useEffect(() => {
+    if (regen) {
+      setLuckyNumber([]);
+      var random = numberPool.sort(() => Math.random() - 0.5);
+      setLuckyNumber(random);
+      setShowNumberPool(true);
+      setShowLuckyNumber(false);
+      setRegen(false);
+    }
+  }, [regen]);
+
+  const generateAll = () => {
+    var newLuck = Math.floor(Math.random() * 10000);
+    var newLuckToArray = newLuck.toString().split("");
+    console.log(newLuckToArray);
+    setShowLuckyNumber(true);
+    setLuckyNumber(newLuckToArray);
+    // if (newLuckToArray.length == 4) {
+    //   let newLuckyNumber = "";
+    //   newLuckyNumber.concat(newLuckToArray);
+
+    //   setLuckyNumber(newLuckyNumber);
+    // }
+  };
+  console.log("pool", luckyNumber);
 
   return (
     <div className="bg-black relative text-white">
@@ -82,22 +110,34 @@ export default function Home() {
             >
               {showNumberPool &&
                 numberPool?.map((number, index) => (
-                  <div
-                    key={index}
-                    className="bg-red-600 w-16  h-16 flex items-center justify-center leading-tight rounded-full shadow-lg shadow-white"
-                  >
-                    <h2 className="text-lg font-bold text-center">{number}</h2>
-                  </div>
+                  <>
+                    <Fade bottom>
+                      <div
+                        key={index}
+                        className="bg-red-600 w-16  h-16 flex items-center justify-center leading-tight rounded-full shadow-lg shadow-white"
+                      >
+                        <h2 className="text-lg font-bold text-center">
+                          {number}
+                        </h2>
+                      </div>
+                    </Fade>
+                  </>
                 ))}
 
               {showLuckyNumber &&
                 luckyNumber.map((number, index) => (
-                  <div
-                    key={index}
-                    className="bg-red-600 w-16  h-16 flex items-center justify-center leading-tight rounded-full shadow-lg shadow-white"
-                  >
-                    <h2 className="text-lg font-bold text-center">{number}</h2>
-                  </div>
+                  <>
+                    <Fade bottom>
+                      <div
+                        key={index}
+                        className="bg-red-600 w-16  h-16 flex items-center justify-center leading-tight rounded-full shadow-lg shadow-white"
+                      >
+                        <h2 className="text-lg font-bold text-center">
+                          {number}
+                        </h2>
+                      </div>
+                    </Fade>
+                  </>
                 ))}
             </div>
           </div>
@@ -142,7 +182,7 @@ export default function Home() {
                 </button>
                 <button
                   onClick={reset}
-                  className="bg-[#E50914] w-full rounded-lg p-2 font-bold mt-4 hover:opacity-50 outline-none"
+                  className="bg-white text-[#E50914] w-full rounded-lg p-2 font-bold mt-4 hover:opacity-50 outline-none"
                 >
                   Reset
                 </button>
@@ -150,6 +190,9 @@ export default function Home() {
             )}
           </div>
         </main>
+        <p>
+          Dunno Your Lucky Number <span onClick={generateAll}>click me</span>
+        </p>
       </div>
       <div className="w-full h-screen">
         <Image
